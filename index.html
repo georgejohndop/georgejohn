@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>George — Cinematographer</title>
+
+  <!-- ============================================================
+       YOUR HANDWRITTEN FONT
+       Place AcHandwritten-Regular.ttf in the same folder as this
+       file, then uncomment the @font-face block below.
+  ============================================================ -->
+  <!--
+  <style>
+    @font-face {
+      font-family: 'AcHandwritten';
+      src: url('AcHandwritten-Regular.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+  </style>
+  -->
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inconsolata:wght@300;400&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ── Reset ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    /* ── Palette ── */
+    :root {
+      --bg:        #18120a;
+      --bg-deep:   #141009;
+      --bg-warm:   #1c1609;
+      --bg-s1:     #181612;
+      --bg-s2:     #141812;
+      --bg-stat2:  #141610;
+      --bg-stat3:  #161210;
+      --bg-stat4:  #14100e;
+      --border:    #352a1a;
+      --border-hi: #3a2e1e;
+      --text:      #e2d5be;
+      --text-mid:  #c0b098;
+      --text-dim:  #6a5a42;
+      --text-faint:#4a3c28;
+      --gold:      #c9a96e;
+      --gold-dim:  #b5956a;
+      --sage:      #7a9e6a;
+      --terra:     #c9906e;
+      --slate:     #8a9aaa;
+      --green-dot: #6b8c5a;
+      /* ── swap 'Satisfy' for 'AcHandwritten' once you add your font ── */
+      --hand: 'AcHandwritten', 'Satisfy', cursive;
+    }
+
+    /* Satisfy as fallback until custom font is added */
+    @import url('https://fonts.googleapis.com/css2?family=Satisfy&display=swap');
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inconsolata', monospace;
+      min-height: 100vh;
+    }
+
+    /* ── Fade-in on load ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .fade { opacity: 0; animation: fadeUp 0.7s ease forwards; }
+    .fade:nth-child(1) { animation-delay: 0.05s; }
+    .fade:nth-child(2) { animation-delay: 0.15s; }
+    .fade:nth-child(3) { animation-delay: 0.25s; }
+    .fade:nth-child(4) { animation-delay: 0.35s; }
+    .fade:nth-child(5) { animation-delay: 0.45s; }
+    .fade:nth-child(6) { animation-delay: 0.55s; }
+
+    /* ── Nav ── */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 40px;
+      border-bottom: 0.5px solid var(--border);
+      background: var(--bg-deep);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .nav-logo {
+      font-family: var(--hand);
+      font-size: 22px;
+      color: var(--text);
+      letter-spacing: 0.02em;
+      text-decoration: none;
+    }
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      color: #7a6a52;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover,
+    .nav-links a.active { color: var(--gold); }
+
+    /* ── Kasavu band ── */
+    .kasavu {
+      background: var(--bg-warm);
+      border-bottom: 0.5px solid var(--border);
+      padding: 7px 40px;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+    }
+    .kasavu-inner {
+      display: flex;
+      align-items: center;
+      flex: 1;
+    }
+    .kd {
+      width: 5px; height: 5px;
+      background: var(--gold);
+      transform: rotate(45deg);
+      opacity: 0.22;
+      flex-shrink: 0;
+      margin: 0 8px;
+    }
+    .kl { flex: 1; height: 0.5px; background: var(--gold); opacity: 0.18; }
+
+    /* ── Hero ── */
+    .hero {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border-bottom: 0.5px solid var(--border);
+      min-height: 480px;
+    }
+    .hero-left {
+      padding: 56px 40px 52px;
+      border-right: 0.5px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .eyebrow {
+      font-size: 10px;
+      letter-spacing: 0.22em;
+      color: var(--gold);
+      opacity: 0.75;
+      margin-bottom: 24px;
+    }
+    .hero-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 56px;
+      font-weight: 300;
+      line-height: 1.05;
+      color: var(--text);
+      margin-bottom: 14px;
+    }
+    .hero-name em {
+      font-style: italic;
+      color: var(--gold-dim);
+    }
+    .tagline {
+      font-family: var(--hand);
+      font-size: 18px;
+      color: #6a5540;
+      margin-bottom: 28px;
+      line-height: 1.7;
+    }
+    .bio {
+      font-size: 12px;
+      line-height: 1.95;
+      color: var(--text-dim);
+      max-width: 340px;
+    }
+    .bio strong { color: #9a8460; font-weight: 400; }
+    .hero-actions {
+      margin-top: 36px;
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+    .btn-primary {
+      font-family: 'Inconsolata', monospace;
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      padding: 12px 26px;
+      background: var(--gold);
+      color: var(--bg);
+      border: none;
+      border-radius: 2px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: opacity 0.2s;
+    }
+    .btn-primary:hover { opacity: 0.85; }
+    .btn-ghost {
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      color: #4a3a28;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .btn-ghost:hover { color: var(--text-dim); }
+
+    /* ── Hero right ── */
+    .hero-right {
+      display: flex;
+      flex-direction: column;
+    }
+    .reel-box {
+      flex: 1;
+      background: #0f0b06;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      border-bottom: 0.5px solid var(--border);
+      cursor: pointer;
+      overflow: hidden;
+    }
+    .reel-box::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--gold);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .reel-box:hover::before { opacity: 0.03; }
+    .play-ring {
+      width: 56px; height: 56px;
+      border: 1px solid rgba(201,169,110,0.25);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.3s, transform 0.3s;
+      position: relative;
+      z-index: 1;
+    }
+    .reel-box:hover .play-ring {
+      border-color: rgba(201,169,110,0.5);
+      transform: scale(1.08);
+    }
+    .play-tri {
+      width: 0; height: 0;
+      border-top: 10px solid transparent;
+      border-bottom: 10px solid transparent;
+      border-left: 16px solid rgba(201,169,110,0.45);
+      margin-left: 5px;
+    }
+    .reel-meta {
+      position: absolute;
+      bottom: 14px; left: 18px; right: 18px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .reel-label {
+      font-size: 9px;
+      letter-spacing: 0.13em;
+      color: #3a2e1e;
+    }
+    .kerala-accent {
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: var(--bg-warm);
+    }
+    .kolam { opacity: 0.3; flex-shrink: 0; }
+    .accent-text {
+      font-family: var(--hand);
+      font-size: 15px;
+      color: #5a4832;
+      font-style: italic;
+    }
+
+    /* ── Stats bar ── */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 0.5px solid var(--border);
+    }
+    .stat {
+      padding: 22px 28px;
+      border-right: 0.5px solid var(--border);
+    }
+    .stat:last-child { border-right: none; }
+    .stat:nth-child(1) { background: var(--bg); }
+    .stat:nth-child(2) { background: var(--bg-stat2); }
+    .stat:nth-child(3) { background: var(--bg-stat3); }
+    .stat:nth-child(4) { background: var(--bg-stat4); }
+    .stat-n {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 30px;
+      font-weight: 300;
+    }
+    .stat:nth-child(1) .stat-n { color: var(--gold); }
+    .stat:nth-child(2) .stat-n { color: var(--sage); }
+    .stat:nth-child(3) .stat-n { color: var(--terra); }
+    .stat:nth-child(4) .stat-n { color: var(--slate); }
+    .stat-l {
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      color: var(--text-faint);
+      margin-top: 4px;
+    }
+
+    /* ── Services ── */
+    .services {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border-bottom: 0.5px solid var(--border);
+    }
+    .svc {
+      padding: 26px 36px;
+      border-right: 0.5px solid var(--border);
+    }
+    .svc:last-child { border-right: none; }
+    .svc:nth-child(1) { background: var(--bg-s1); }
+    .svc:nth-child(2) { background: var(--bg-s2); }
+    .svc-title {
+      font-family: var(--hand);
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+    .svc:nth-child(1) .svc-title { color: var(--gold); }
+    .svc:nth-child(2) .svc-title { color: var(--sage); }
+    .svc-desc {
+      font-size: 11px;
+      line-height: 1.9;
+      color: var(--text-faint);
+    }
+
+    /* ── Work section ── */
+    .work {
+      padding: 40px;
+      border-bottom: 0.5px solid var(--border);
+      background: var(--bg);
+    }
+    .sec-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 26px;
+    }
+    .sec-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 26px;
+      font-weight: 300;
+      color: var(--text);
+    }
+    .sec-link {
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      color: var(--text-faint);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .sec-link:hover { color: var(--gold); }
+
+    .film-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .film-card {
+      border-radius: 3px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.25s;
+    }
+    .film-card:hover { transform: translateY(-3px); }
+    .film-card:nth-child(1) { border: 0.5px solid #3a3020; }
+    .film-card:nth-child(2) { border: 0.5px solid #253020; }
+    .film-card:nth-child(3) { border: 0.5px solid #302820; }
+    .film-card:nth-child(4) { border: 0.5px solid #352a1a; }
+    .film-card:nth-child(5) { border: 0.5px solid #2a3020; }
+    .film-card:nth-child(6) { border: 0.5px solid #302a18; }
+
+    .film-thumb {
+      aspect-ratio: 16/9;
+      display: flex;
+      align-items: flex-end;
+      padding: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+    /* Placeholder gradients — replace with real background-image */
+    .film-card:nth-child(1) .film-thumb { background: #1e1508; }
+    .film-card:nth-child(2) .film-thumb { background: #0e1410; }
+    .film-card:nth-child(3) .film-thumb { background: #1a1008; }
+    .film-card:nth-child(4) .film-thumb { background: #121014; }
+    .film-card:nth-child(5) .film-thumb { background: #0e1208; }
+    .film-card:nth-child(6) .film-thumb { background: #1c1408; }
+
+    .film-badge {
+      font-size: 9px;
+      letter-spacing: 0.1em;
+      padding: 3px 8px;
+      border-radius: 2px;
+    }
+    .film-card:nth-child(1) .film-badge,
+    .film-card:nth-child(4) .film-badge {
+      background: rgba(201,169,110,0.1);
+      color: rgba(201,169,110,0.6);
+      border: 0.5px solid rgba(201,169,110,0.2);
+    }
+    .film-card:nth-child(2) .film-badge,
+    .film-card:nth-child(5) .film-badge {
+      background: rgba(122,158,106,0.1);
+      color: rgba(122,158,106,0.6);
+      border: 0.5px solid rgba(122,158,106,0.2);
+    }
+    .film-card:nth-child(3) .film-badge,
+    .film-card:nth-child(6) .film-badge {
+      background: rgba(201,144,110,0.1);
+      color: rgba(201,144,110,0.6);
+      border: 0.5px solid rgba(201,144,110,0.2);
+    }
+    .film-info {
+      padding: 12px 14px 14px;
+      background: var(--bg-deep);
+    }
+    .film-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 15px;
+      font-weight: 300;
+      color: var(--text-mid);
+      margin-bottom: 5px;
+    }
+    .film-role {
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      color: var(--text-faint);
+    }
+
+    /* ── About ── */
+    .about {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border-bottom: 0.5px solid var(--border);
+    }
+    .about-left {
+      padding: 48px 40px;
+      border-right: 0.5px solid var(--border);
+      background: var(--bg-warm);
+    }
+    .about-right {
+      padding: 48px 40px;
+      background: var(--bg);
+    }
+    .about-label {
+      font-size: 9px;
+      letter-spacing: 0.22em;
+      color: var(--gold);
+      opacity: 0.6;
+      margin-bottom: 18px;
+    }
+    .about-heading {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 34px;
+      font-weight: 300;
+      line-height: 1.15;
+      color: var(--text);
+      margin-bottom: 24px;
+    }
+    .about-heading em { font-style: italic; color: var(--gold-dim); }
+    .about-body {
+      font-size: 12px;
+      line-height: 2;
+      color: var(--text-dim);
+    }
+    .about-body p + p { margin-top: 14px; }
+    .about-body strong { color: #9a8460; font-weight: 400; }
+
+    .skills-list {
+      list-style: none;
+      margin-top: 8px;
+    }
+    .skills-list li {
+      font-size: 11px;
+      line-height: 1;
+      color: var(--text-faint);
+      padding: 10px 0;
+      border-bottom: 0.5px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      letter-spacing: 0.06em;
+    }
+    .skills-list li:first-child { border-top: 0.5px solid var(--border); }
+    .skill-dot {
+      width: 4px; height: 4px;
+      border-radius: 50%;
+      background: var(--gold);
+      opacity: 0.5;
+      flex-shrink: 0;
+    }
+
+    /* ── Contact ── */
+    .contact {
+      padding: 56px 40px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      background: var(--bg-deep);
+      border-bottom: 0.5px solid var(--border);
+    }
+    .contact-label {
+      font-size: 9px;
+      letter-spacing: 0.22em;
+      color: var(--gold);
+      opacity: 0.6;
+      margin-bottom: 18px;
+    }
+    .contact-heading {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 36px;
+      font-weight: 300;
+      line-height: 1.1;
+      color: var(--text);
+      margin-bottom: 28px;
+    }
+    .contact-heading em { font-style: italic; color: var(--gold-dim); }
+    .contact-note {
+      font-size: 12px;
+      line-height: 1.9;
+      color: var(--text-dim);
+      margin-bottom: 32px;
+    }
+    .contact-links { display: flex; flex-direction: column; gap: 14px; }
+    .contact-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 12px;
+      color: var(--text-faint);
+      text-decoration: none;
+      letter-spacing: 0.06em;
+      transition: color 0.2s;
+    }
+    .contact-link:hover { color: var(--gold); }
+    .contact-link-label {
+      font-size: 9px;
+      letter-spacing: 0.16em;
+      color: var(--text-faint);
+      opacity: 0.6;
+      min-width: 60px;
+    }
+
+    .contact-form { display: flex; flex-direction: column; gap: 16px; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-label {
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      color: var(--text-faint);
+    }
+    .form-input,
+    .form-textarea {
+      background: #1c1609;
+      border: 0.5px solid var(--border);
+      color: var(--text);
+      font-family: 'Inconsolata', monospace;
+      font-size: 12px;
+      padding: 10px 14px;
+      border-radius: 2px;
+      outline: none;
+      transition: border-color 0.2s;
+      resize: none;
+    }
+    .form-input:focus,
+    .form-textarea:focus { border-color: rgba(201,169,110,0.4); }
+    .form-textarea { height: 110px; }
+    .form-submit {
+      font-family: 'Inconsolata', monospace;
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      padding: 13px 28px;
+      background: var(--gold);
+      color: var(--bg);
+      border: none;
+      border-radius: 2px;
+      cursor: pointer;
+      align-self: flex-start;
+      transition: opacity 0.2s;
+    }
+    .form-submit:hover { opacity: 0.85; }
+
+    /* ── Footer ── */
+    footer {
+      padding: 16px 40px;
+      background: var(--bg-deep);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .footer-avail {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      color: var(--text-faint);
+      letter-spacing: 0.08em;
+    }
+    .dot-green {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--green-dot);
+    }
+    .footer-copy {
+      font-size: 10px;
+      color: #3a2e1e;
+      letter-spacing: 0.08em;
+    }
+    .footer-motif {
+      display: flex;
+      align-items: center;
+      opacity: 0.14;
+    }
+    .fm-d {
+      width: 4px; height: 4px;
+      background: var(--gold);
+      transform: rotate(45deg);
+      margin: 0 7px;
+    }
+    .fm-l { width: 18px; height: 0.5px; background: var(--gold); }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      nav { padding: 16px 20px; }
+      .nav-links { gap: 18px; }
+      .hero { grid-template-columns: 1fr; }
+      .hero-right { border-top: 0.5px solid var(--border); }
+      .hero-left { padding: 40px 20px; }
+      .hero-name { font-size: 40px; }
+      .stats { grid-template-columns: repeat(2, 1fr); }
+      .stat:nth-child(2) { border-right: none; }
+      .services { grid-template-columns: 1fr; }
+      .svc { border-right: none; border-bottom: 0.5px solid var(--border); }
+      .svc:last-child { border-bottom: none; }
+      .film-grid { grid-template-columns: 1fr 1fr; }
+      .about { grid-template-columns: 1fr; }
+      .about-left { border-right: none; border-bottom: 0.5px solid var(--border); }
+      .about-left, .about-right { padding: 36px 20px; }
+      .contact { grid-template-columns: 1fr; gap: 40px; padding: 40px 20px; }
+      .work { padding: 32px 20px; }
+      footer { padding: 14px 20px; flex-wrap: wrap; gap: 10px; }
+      .kasavu { padding: 7px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-logo">George</a>
+    <ul class="nav-links">
+      <li><a href="#work" class="active">work</a></li>
+      <li><a href="#about">about</a></li>
+      <li><a href="#services">services</a></li>
+      <li><a href="#contact">contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- KASAVU BAND -->
+  <div class="kasavu">
+    <div class="kasavu-inner">
+      <div class="kl"></div>
+      <div class="kd"></div><div class="kl"></div>
+      <div class="kd"></div><div class="kl"></div>
+      <div class="kd"></div><div class="kl"></div>
+      <div class="kd"></div><div class="kl"></div>
+      <div class="kd"></div><div class="kl"></div>
+      <div class="kd"></div><div class="kl"></div>
+      <div class="kd"></div><div class="kl"></div>
+      <div class="kd"></div><div class="kl"></div>
+      <div class="kd"></div><div class="kl"></div>
+      <div class="kd"></div><div class="kl"></div>
+      <div class="kd"></div><div class="kl"></div>
+      <div class="kd"></div><div class="kl"></div>
+      <div class="kd"></div><div class="kl"></div>
+      <div class="kd"></div><div class="kl"></div>
+      <div class="kd"></div><div class="kl"></div>
+      <div class="kd"></div><div class="kl"></div>
+      <div class="kd"></div><div class="kl"></div>
+      <div class="kd"></div><div class="kl"></div>
+      <div class="kd"></div><div class="kl"></div>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero fade">
+    <div class="hero-left">
+      <p class="eyebrow">1AC &nbsp;·&nbsp; Focus Puller &nbsp;·&nbsp; DOP</p>
+      <h1 class="hero-name">Framing<br><em>light &amp;<br>shadow</em></h1>
+      <p class="tagline">Building images that hold.</p>
+      <p class="bio">
+        School-trained, set-tested. <strong>Assisting working DOPs</strong> while
+        developing a body of independent work — from short films to documentary.
+        Based in Kerala, available across India.
+      </p>
+      <div class="hero-actions">
+        <a href="#work" class="btn-primary">View reel</a>
+        <a href="#work" class="btn-ghost">↓ see work</a>
+      </div>
+    </div>
+    <div class="hero-right">
+      <!-- Replace href with your actual reel link -->
+      <a href="#" class="reel-box" aria-label="Play demo reel">
+        <div class="play-ring"><div class="play-tri"></div></div>
+        <div class="reel-meta">
+          <span class="reel-label">DEMO REEL — 2025</span>
+          <span class="reel-label">00:00:00:00</span>
+        </div>
+      </a>
+      <div class="kerala-accent">
+        <svg class="kolam" width="36" height="36" viewBox="0 0 36 36" fill="none">
+          <circle cx="18" cy="18" r="1.5" fill="#c9a96e"/>
+          <circle cx="18" cy="8"  r="1"   fill="#7a9e6a"/>
+          <circle cx="18" cy="28" r="1"   fill="#7a9e6a"/>
+          <circle cx="8"  cy="18" r="1"   fill="#c9906e"/>
+          <circle cx="28" cy="18" r="1"   fill="#c9906e"/>
+          <circle cx="11" cy="11" r="1"   fill="#8a9aaa"/>
+          <circle cx="25" cy="11" r="1"   fill="#8a9aaa"/>
+          <circle cx="11" cy="25" r="1"   fill="#c9a96e"/>
+          <circle cx="25" cy="25" r="1"   fill="#c9a96e"/>
+          <rect x="17.3" y="8"  width="1.4" height="20"   fill="#c9a96e" opacity="0.1"/>
+          <rect x="8"  y="17.3" width="20"  height="1.4"  fill="#7a9e6a" opacity="0.1"/>
+          <rect x="10.3" y="10.3" width="1" height="15.4" transform="rotate(-45 10.3 10.3)" fill="#c9906e" opacity="0.1"/>
+          <rect x="10.3" y="25.7" width="1" height="15.4" transform="rotate(45 10.3 25.7)"  fill="#8a9aaa" opacity="0.1"/>
+        </svg>
+        <span class="accent-text">light from the backwaters at dusk</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <div class="stats fade">
+    <div class="stat">
+      <div class="stat-n">12+</div>
+      <div class="stat-l">projects</div>
+    </div>
+    <div class="stat">
+      <div class="stat-n">4</div>
+      <div class="stat-l">DOP credits</div>
+    </div>
+    <div class="stat">
+      <div class="stat-n">35mm</div>
+      <div class="stat-l">&amp; digital</div>
+    </div>
+    <div class="stat">
+      <div class="stat-n">Kerala</div>
+      <div class="stat-l">based</div>
+    </div>
+  </div>
+
+  <!-- SERVICES -->
+  <section id="services" class="services fade">
+    <div class="svc">
+      <div class="svc-title">Director of Photography</div>
+      <div class="svc-desc">
+        Narrative, short film,<br>
+        documentary, commercial
+      </div>
+    </div>
+    <div class="svc">
+      <div class="svc-title">1st Assistant Camera</div>
+      <div class="svc-desc">
+        Focus pulling, camera dept.<br>
+        support, on-set AC
+      </div>
+    </div>
+  </section>
+
+  <!-- WORK -->
+  <section id="work" class="work fade">
+    <div class="sec-head">
+      <h2 class="sec-title">Selected work</h2>
+      <a href="#" class="sec-link">view all →</a>
+    </div>
+    <div class="film-grid">
+
+      <!-- Card 1 — replace film-thumb background-image with your still -->
+      <div class="film-card">
+        <div class="film-thumb">
+          <span class="film-badge">short film</span>
+        </div>
+        <div class="film-info">
+          <div class="film-title">Project Title</div>
+          <div class="film-role">Director of Photography</div>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="film-card">
+        <div class="film-thumb">
+          <span class="film-badge">documentary</span>
+        </div>
+        <div class="film-info">
+          <div class="film-title">Project Title</div>
+          <div class="film-role">1st AC · Focus Puller</div>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="film-card">
+        <div class="film-thumb">
+          <span class="film-badge">narrative</span>
+        </div>
+        <div class="film-info">
+          <div class="film-title">Project Title</div>
+          <div class="film-role">Director of Photography</div>
+        </div>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="film-card">
+        <div class="film-thumb">
+          <span class="film-badge">short film</span>
+        </div>
+        <div class="film-info">
+          <div class="film-title">Project Title</div>
+          <div class="film-role">1st AC · Focus Puller</div>
+        </div>
+      </div>
+
+      <!-- Card 5 -->
+      <div class="film-card">
+        <div class="film-thumb">
+          <span class="film-badge">documentary</span>
+        </div>
+        <div class="film-info">
+          <div class="film-title">Project Title</div>
+          <div class="film-role">Director of Photography</div>
+        </div>
+      </div>
+
+      <!-- Card 6 -->
+      <div class="film-card">
+        <div class="film-thumb">
+          <span class="film-badge">narrative</span>
+        </div>
+        <div class="film-info">
+          <div class="film-title">Project Title</div>
+          <div class="film-role">1st AC · Focus Puller</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" class="about fade">
+    <div class="about-left">
+      <p class="about-label">about</p>
+      <h2 class="about-heading">A cinematographer<br>finding <em>the frame</em></h2>
+      <div class="about-body">
+        <p>
+          <!-- Replace with your own bio -->
+          Film school trained, with credits across short fiction, documentary,
+          and narrative work. Currently building momentum as both a
+          <strong>Director of Photography</strong> and a <strong>1st Assistant Camera</strong>,
+          working alongside established DOPs on set.
+        </p>
+        <p>
+          Rooted in Kerala, drawn to natural light, texture, and the kind of
+          image that stays with you long after the screen goes dark.
+          Long-term ambitions include ASC membership and working internationally.
+        </p>
+      </div>
+    </div>
+    <div class="about-right">
+      <p class="about-label">craft &amp; tools</p>
+      <ul class="skills-list">
+        <li><span class="skill-dot"></span>Camera operation &amp; composition</li>
+        <li><span class="skill-dot"></span>Focus pulling &amp; 1AC</li>
+        <li><span class="skill-dot"></span>35mm &amp; digital acquisition</li>
+        <li><span class="skill-dot"></span>Lighting design</li>
+        <li><span class="skill-dot"></span>DaVinci Resolve (in progress)</li>
+        <li><span class="skill-dot"></span>On-set camera department support</li>
+        <li><span class="skill-dot"></span>Short film · documentary · commercial</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="contact fade">
+    <div>
+      <p class="contact-label">contact</p>
+      <h2 class="contact-heading">Let's make<br><em>something</em></h2>
+      <p class="contact-note">
+        Available for DOP and 1AC roles across India.<br>
+        Open to short films, documentaries, and commercials.
+      </p>
+      <div class="contact-links">
+        <!-- Replace with your real details -->
+        <a href="mailto:your@email.com" class="contact-link">
+          <span class="contact-link-label">email</span>
+          your@email.com
+        </a>
+        <a href="https://instagram.com/yourhandle" class="contact-link" target="_blank" rel="noopener">
+          <span class="contact-link-label">instagram</span>
+          @yourhandle
+        </a>
+        <a href="https://imdb.com" class="contact-link" target="_blank" rel="noopener">
+          <span class="contact-link-label">imdb</span>
+          your profile
+        </a>
+      </div>
+    </div>
+    <div>
+      <p class="contact-label">send a message</p>
+      <form class="contact-form" onsubmit="return false;">
+        <div class="form-group">
+          <label class="form-label" for="name">name</label>
+          <input class="form-input" id="name" type="text" placeholder="Your name" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="email">email</label>
+          <input class="form-input" id="email" type="email" placeholder="your@email.com" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="message">message</label>
+          <textarea class="form-textarea" id="message" placeholder="Tell me about the project..."></textarea>
+        </div>
+        <button type="submit" class="form-submit">send ↗</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-avail">
+      <div class="dot-green"></div>
+      Available for projects — 2025
+    </div>
+    <div class="footer-motif">
+      <div class="fm-l"></div><div class="fm-d"></div>
+      <div class="fm-l"></div><div class="fm-d"></div>
+      <div class="fm-l"></div><div class="fm-d"></div>
+      <div class="fm-l"></div><div class="fm-d"></div>
+      <div class="fm-l"></div><div class="fm-d"></div>
+      <div class="fm-l"></div>
+    </div>
+    <p class="footer-copy">© 2025 George</p>
+  </footer>
+
+  <script>
+    // Active nav link on scroll
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-links a');
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(s => {
+        if (window.scrollY >= s.offsetTop - 120) current = s.id;
+      });
+      navLinks.forEach(a => {
+        a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+      });
+    });
+  </script>
+
+</body>
+</html>
